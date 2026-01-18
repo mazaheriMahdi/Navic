@@ -152,7 +152,7 @@ private fun TopBarScope.NavigationIcon() {
 				),
 				onClick = {
 					ctx.clickSound()
-					backStack.removeLast()
+					if (backStack.size > 1) backStack.removeLastOrNull()
 				}
 			) {
 				Icon(

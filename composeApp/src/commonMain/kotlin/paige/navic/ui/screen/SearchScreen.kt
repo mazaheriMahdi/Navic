@@ -220,7 +220,7 @@ private fun SearchTopBar(
 					onClick = {
 						ctx.clickSound()
 						focusManager.clearFocus(true)
-						backStack.removeLast()
+						if (backStack.size > 1) backStack.removeLastOrNull()
 					}
 				),
 			verticalArrangement = Arrangement.Center,
