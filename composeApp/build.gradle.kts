@@ -6,6 +6,19 @@ plugins {
 	alias(libs.plugins.androidApplication)
 	alias(libs.plugins.composeMultiplatform)
 	alias(libs.plugins.composeCompiler)
+	alias(libs.plugins.aboutLibraries)
+}
+aboutLibraries {
+	collect {
+		configPath = file("acknowledgements")
+	}
+	export {
+		outputFile = file("src/commonMain/composeResources/files/acknowledgements.json")
+	}
+}
+
+tasks.named("copyNonXmlValueResourcesForCommonMain") {
+	dependsOn(":composeApp:exportLibraryDefinitions")
 }
 
 kotlin {
@@ -57,6 +70,8 @@ kotlin {
 			implementation(libs.multiplatformSettings.noArg)
 			implementation(libs.multiplatformSettings.remember)
 			implementation(libs.reorderable)
+			implementation(libs.aboutLibraries.core)
+			implementation(libs.aboutLibraries.compose.m3)
 		}
 		androidMain.dependencies {
 			implementation(libs.androidx.activity.compose)
