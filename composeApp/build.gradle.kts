@@ -184,7 +184,7 @@ android {
 
 compose.desktop {
 	application {
-		mainClass = "paige.Navic.MainKt"
+		mainClass = "paige.navic.MainKt"
 		nativeDistributions {
 			targetFormats(TargetFormat.Msi, TargetFormat.Dmg, TargetFormat.AppImage)
 			packageName = "paige.Navic"
