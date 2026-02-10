@@ -98,6 +98,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-konan-
 
+      - name: Run Gradle tasks
+        run: ./gradlew :composeApp:generateValkyrieImageVector
+
       - name: Build IPA
         run: |
           xcodebuild archive \
