@@ -26,6 +26,7 @@ configurations.all {
 valkyrie {
 	packageName = "paige.navic.icons"
 	generateAtSync = true
+	outputDirectory = layout.buildDirectory.dir("generated/sources/valkyrie")
 
 	iconPack {
 		name = "Icons"
