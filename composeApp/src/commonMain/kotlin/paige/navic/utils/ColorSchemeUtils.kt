@@ -36,7 +36,8 @@ fun lightIosColorScheme(
 				error = IosRed,
 				onError = Color.White,
 				errorContainer = IosRed,
-				onErrorContainer = Color.White
+				onErrorContainer = Color.White,
+				surfaceVariant = Color(224, 221, 220)
 			)
 		}
 	)

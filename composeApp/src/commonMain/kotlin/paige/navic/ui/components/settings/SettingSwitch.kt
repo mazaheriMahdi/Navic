@@ -9,6 +9,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import paige.navic.data.models.Settings
@@ -36,7 +37,7 @@ fun SettingSwitch(
 					modifier = Modifier.size(SwitchDefaults.IconSize)
 				)
 			} else {
-				Box(Modifier.size(32.dp).background(Color.White, CircleShape))
+				Box(Modifier.size(24.dp).shadow(3.dp, CircleShape).background(Color.White, CircleShape))
 			}
 		}
 	)
