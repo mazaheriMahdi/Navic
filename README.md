@@ -1,6 +1,3 @@
-> [!NOTE]
-> Development will now continue here on Codeberg. Github has falsely suspended my account for no reason. Fuck Microsoft!
-
 <div align="center">
 
 # Navic
