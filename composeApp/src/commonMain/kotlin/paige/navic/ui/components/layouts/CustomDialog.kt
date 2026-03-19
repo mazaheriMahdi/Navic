@@ -33,14 +33,12 @@ fun CustomDialog(
 	content: @Composable ColumnScope.() -> Unit
 ) {
 	Surface(
-		// Ensure the surface doesn't grow infinitely
 		modifier = Modifier
 			.fillMaxWidth()
 			.wrapContentHeight(),
 		shape = MaterialTheme.shapes.extraExtraLarge,
 		color = MaterialTheme.colorScheme.surfaceContainerHigh
 	) {
-		// Main container
 		Column(
 			modifier = Modifier
 				.padding(24.dp)
@@ -73,9 +71,7 @@ fun CustomDialog(
 				verticalAlignment = Alignment.CenterVertically
 			) {
 
-				Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
 					buttons()
-				}
 			}
 		}
 	}
