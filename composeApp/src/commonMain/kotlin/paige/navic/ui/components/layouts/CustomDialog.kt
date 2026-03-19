@@ -63,7 +63,7 @@ fun CustomDialog(
 
 			Row(
 				modifier = Modifier.fillMaxWidth(),
-				horizontalArrangement = Arrangement.End,
+				horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
 				verticalAlignment = Alignment.CenterVertically
 			) {
 				buttons()
