@@ -39,6 +39,7 @@ import navic.composeapp.generated.resources.info_needs_log_in
 import navic.composeapp.generated.resources.action_remove_star
 import navic.composeapp.generated.resources.action_share
 import navic.composeapp.generated.resources.action_star
+import navic.composeapp.generated.resources.info_no_albums
 import navic.composeapp.generated.resources.option_sort_alphabetical_by_artist
 import navic.composeapp.generated.resources.option_sort_alphabetical_by_name
 import navic.composeapp.generated.resources.option_sort_frequent
@@ -56,9 +57,11 @@ import paige.navic.data.models.settings.enums.BottomBarVisibilityMode
 import paige.navic.data.session.SessionManager
 import paige.navic.icons.Icons
 import paige.navic.icons.filled.Star
+import paige.navic.icons.outlined.Album
 import paige.navic.icons.outlined.Share
 import paige.navic.icons.outlined.Sort
 import paige.navic.icons.outlined.Star
+import paige.navic.ui.components.common.ContentUnavailable
 import paige.navic.ui.components.common.Dropdown
 import paige.navic.ui.components.common.DropdownItem
 import paige.navic.ui.components.common.SelectionDropdown
@@ -137,7 +140,10 @@ fun AlbumsScreen(
 						Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
 					else Modifier,
 					state = viewModel.gridState,
-					contentPadding = innerPadding.withoutTop()
+					contentPadding = innerPadding.withoutTop(),
+					verticalArrangement = if ((state as? UiState.Success)?.data?.isEmpty() == true)
+						Arrangement.Center
+					else Arrangement.spacedBy(12.dp)
 				) {
 					when (state) {
 						is UiState.Loading -> artGridPlaceholder()
@@ -154,19 +160,30 @@ fun AlbumsScreen(
 									}
 								)
 							}
-							item(span = { GridItemSpan(maxLineSpan) }) {
-								LaunchedEffect(viewModel.gridState) {
-									snapshotFlow { viewModel.gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
-										.collect { lastVisible ->
-											val totalItems = viewModel.gridState.layoutInfo.totalItemsCount
-											if (lastVisible != null && lastVisible >= totalItems - 1 && !isPaginating) {
-												viewModel.paginate()
-											}
-										}
+
+							if (state.data.isEmpty()) {
+								item(span = { GridItemSpan(maxLineSpan) }) {
+									ContentUnavailable(
+										icon = Icons.Outlined.Album,
+										label = stringResource(Res.string.info_no_albums)
+									)
 								}
-								if (isPaginating) {
-									Row(horizontalArrangement = Arrangement.Center) {
-										ContainedLoadingIndicator(Modifier.size(48.dp))
+							} else {
+								item(span = { GridItemSpan(maxLineSpan) }) {
+									LaunchedEffect(viewModel.gridState) {
+										snapshotFlow { viewModel.gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+											.collect { lastVisible ->
+												val totalItems =
+													viewModel.gridState.layoutInfo.totalItemsCount
+												if (lastVisible != null && lastVisible >= totalItems - 1 && !isPaginating) {
+													viewModel.paginate()
+												}
+											}
+									}
+									if (isPaginating) {
+										Row(horizontalArrangement = Arrangement.Center) {
+											ContainedLoadingIndicator(Modifier.size(48.dp))
+										}
 									}
 								}
 							}

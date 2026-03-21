@@ -4,9 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -36,9 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kyant.capsule.ContinuousRoundedRectangle
@@ -65,6 +61,7 @@ import paige.navic.icons.Icons
 import paige.navic.icons.filled.ShareOff
 import paige.navic.icons.outlined.Delete
 import paige.navic.icons.outlined.Share
+import paige.navic.ui.components.common.ContentUnavailable
 import paige.navic.ui.components.common.CoverArt
 import paige.navic.ui.components.common.Dropdown
 import paige.navic.ui.components.common.DropdownItem
@@ -132,22 +129,10 @@ fun SharesScreen(
 							}
 							if (state.data.isEmpty()) {
 								item(span = { GridItemSpan(maxLineSpan) }) {
-									Column(
-										modifier = Modifier.fillMaxWidth().alpha(.6f),
-										horizontalAlignment = Alignment.CenterHorizontally,
-										verticalArrangement = Arrangement.spacedBy(8.dp)
-									) {
-										Icon(
-											Icons.Filled.ShareOff,
-											contentDescription = null,
-											modifier = Modifier.size(64.dp)
-										)
-										Text(
-											stringResource(Res.string.info_no_shares),
-											style = MaterialTheme.typography.headlineMedium,
-											textAlign = TextAlign.Center
-										)
-									}
+									ContentUnavailable(
+										icon = Icons.Filled.ShareOff,
+										label = stringResource(Res.string.info_no_shares)
+									)
 								}
 							}
 						}
