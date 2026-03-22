@@ -1,24 +1,14 @@
-package paige.navic.ui.screens
+package paige.navic.ui.screens.library
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,14 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavKey
 import dev.zt64.subsonic.api.model.AlbumListType
 import navic.composeapp.generated.resources.Res
 import navic.composeapp.generated.resources.info_needs_log_in
@@ -50,10 +36,7 @@ import navic.composeapp.generated.resources.title_artists
 import navic.composeapp.generated.resources.title_genres
 import navic.composeapp.generated.resources.title_library
 import navic.composeapp.generated.resources.title_playlists
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
-import paige.navic.LocalCtx
-import paige.navic.LocalNavStack
 import paige.navic.data.models.Screen
 import paige.navic.data.session.SessionManager
 import paige.navic.icons.Icons
@@ -63,19 +46,19 @@ import paige.navic.icons.outlined.Shuffle
 import paige.navic.icons.outlined.Star
 import paige.navic.ui.components.dialogs.DeletionDialog
 import paige.navic.ui.components.dialogs.DeletionEndpoint
-import paige.navic.ui.screens.share.dialogs.ShareDialog
 import paige.navic.ui.components.layouts.RootBottomBar
 import paige.navic.ui.components.layouts.RootTopBar
 import paige.navic.ui.components.layouts.horizontalSection
 import paige.navic.ui.screens.album.components.AlbumListScreenItem
-import paige.navic.ui.screens.artist.ArtistsScreenItem
-import paige.navic.ui.screens.genre.components.GenreListScreenCard
-import paige.navic.ui.theme.defaultFont
 import paige.navic.ui.screens.album.viewmodels.AlbumListViewModel
+import paige.navic.ui.screens.artist.ArtistsScreenItem
 import paige.navic.ui.screens.artist.viewmodels.ArtistListViewModel
+import paige.navic.ui.screens.genre.components.GenreListScreenCard
 import paige.navic.ui.screens.genre.viewmodels.GenreListViewModel
+import paige.navic.ui.screens.library.components.libraryScreenOverviewButton
 import paige.navic.ui.screens.playlist.components.PlaylistListScreenItem
 import paige.navic.ui.screens.playlist.viewmodels.PlaylistListViewModel
+import paige.navic.ui.screens.share.dialogs.ShareDialog
 import paige.navic.utils.LocalBottomBarScrollManager
 import paige.navic.utils.UiState
 import paige.navic.utils.withoutTop
@@ -143,25 +126,25 @@ fun LibraryScreen(
 				verticalArrangement = Arrangement.spacedBy(5.dp),
 				horizontalArrangement = Arrangement.spacedBy(5.dp),
 			) {
-				overviewButton(
+				libraryScreenOverviewButton(
 					icon = Icons.Outlined.LibraryAdd,
 					label = Res.string.option_sort_newest,
 					destination = Screen.AlbumList(true, AlbumListType.Newest),
 					start = true
 				)
-				overviewButton(
+				libraryScreenOverviewButton(
 					icon = Icons.Outlined.Shuffle,
 					label = Res.string.option_sort_random,
 					destination = Screen.AlbumList(true, AlbumListType.Random),
 					start = false
 				)
-				overviewButton(
+				libraryScreenOverviewButton(
 					icon = Icons.Outlined.Star,
 					label = Res.string.option_sort_starred,
 					destination = Screen.AlbumList(true, AlbumListType.Starred),
 					start = true
 				)
-				overviewButton(
+				libraryScreenOverviewButton(
 					icon = Icons.Outlined.History,
 					label = Res.string.option_sort_frequent,
 					destination = Screen.AlbumList(true, AlbumListType.Frequent),
@@ -251,59 +234,4 @@ fun LibraryScreen(
 		id = deletionId,
 		onIdClear = { deletionId = null }
 	)
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-private fun LazyGridScope.overviewButton(
-	icon: ImageVector,
-	label: StringResource,
-	destination: NavKey,
-	start: Boolean
-) {
-	item(span = { GridItemSpan(1) }) {
-		val ctx = LocalCtx.current
-		val backStack = LocalNavStack.current
-		Button(
-			modifier = Modifier
-				.fillMaxWidth()
-				.height(42.dp)
-				.padding(
-					start = if (start) 16.dp else 0.dp,
-					end = if (!start) 16.dp else 0.dp,
-				),
-			contentPadding = PaddingValues(horizontal = 12.dp),
-			elevation = null,
-			shapes = ButtonDefaults.shapes(
-				shape = MaterialTheme.shapes.small,
-				pressedShape = MaterialTheme.shapes.extraSmall
-			),
-			colors = ButtonDefaults.buttonColors(
-				containerColor = MaterialTheme.colorScheme.surfaceContainer,
-				contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-			),
-			onClick = {
-				ctx.clickSound()
-				if (backStack.lastOrNull() !is Screen.AlbumList) {
-					backStack.add(destination)
-				}
-			}
-		) {
-			Row(
-				modifier = Modifier.fillMaxWidth(),
-				verticalAlignment = Alignment.CenterVertically
-			) {
-				Icon(
-					icon,
-					contentDescription = null
-				)
-				Spacer(Modifier.width(10.dp))
-				Text(
-					stringResource(label),
-					maxLines = 1,
-					fontFamily = defaultFont(100, round = 100f),
-					autoSize = TextAutoSize.StepBased(minFontSize = 1.sp, maxFontSize = 14.sp),
-				)
-			}
-		}
-	}
 }
