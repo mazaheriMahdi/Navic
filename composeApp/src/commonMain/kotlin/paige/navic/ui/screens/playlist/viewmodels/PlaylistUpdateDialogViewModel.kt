@@ -1,4 +1,4 @@
-package paige.navic.ui.viewmodels
+package paige.navic.ui.screens.playlist.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,8 +13,8 @@ import paige.navic.data.session.SessionManager
 import paige.navic.utils.UiState
 
 class PlaylistUpdateDialogViewModel(
-	private val tracks: List<Song>,
-	private val playlistToExclude: String?
+    private val tracks: List<Song>,
+    private val playlistToExclude: String?
 ) : ViewModel() {
 	private val _playlistsState = MutableStateFlow<UiState<List<Playlist>>>(UiState.Loading)
 	val playlistsState = _playlistsState.asStateFlow()

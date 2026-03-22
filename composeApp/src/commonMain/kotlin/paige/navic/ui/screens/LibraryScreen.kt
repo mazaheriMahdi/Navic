@@ -74,7 +74,8 @@ import paige.navic.ui.theme.defaultFont
 import paige.navic.ui.screens.album.viewmodels.AlbumListViewModel
 import paige.navic.ui.screens.artist.viewmodels.ArtistListViewModel
 import paige.navic.ui.screens.genres.viewmodels.GenreListViewModel
-import paige.navic.ui.viewmodels.PlaylistsViewModel
+import paige.navic.ui.screens.playlist.components.PlaylistListScreenItem
+import paige.navic.ui.screens.playlist.viewmodels.PlaylistListViewModel
 import paige.navic.utils.LocalBottomBarScrollManager
 import paige.navic.utils.UiState
 import paige.navic.utils.withoutTop
@@ -86,12 +87,12 @@ fun LibraryScreen(
 	albumListViewModel: AlbumListViewModel = viewModel(key = "libraryAlbums") {
 		AlbumListViewModel(AlbumListType.Recent)
 	},
-	playlistsViewModel: PlaylistsViewModel = viewModel { PlaylistsViewModel() },
+	playlistListViewModel: PlaylistListViewModel = viewModel { PlaylistListViewModel() },
 	artistListViewModel: ArtistListViewModel = viewModel { ArtistListViewModel() },
 	genreListViewModel: GenreListViewModel = viewModel { GenreListViewModel() }
 ) {
 	val recentsState by albumListViewModel.albumsState.collectAsState()
-	val playlistsState by playlistsViewModel.playlistsState.collectAsState()
+	val playlistsState by playlistListViewModel.playlistsState.collectAsState()
 	val artistsState by artistListViewModel.artistsState.collectAsState()
 	val genresState by genreListViewModel.genresState.collectAsState()
 
@@ -129,7 +130,7 @@ fun LibraryScreen(
 			onRefresh = {
 				if (!isLoggedIn) return@PullToRefreshBox
 				albumListViewModel.refreshAlbums()
-				playlistsViewModel.refreshPlaylists()
+				playlistListViewModel.refreshPlaylists()
 				artistListViewModel.refreshArtists()
 				genreListViewModel.refreshGenres()
 			}
@@ -197,10 +198,10 @@ fun LibraryScreen(
 						key = { it.id },
 						seeAll = true
 					) { playlist ->
-						PlaylistsScreenItem(
+						PlaylistListScreenItem(
 							modifier = Modifier.animateItem(fadeInSpec = null).width(150.dp),
 							playlist = playlist,
-							viewModel = playlistsViewModel,
+							viewModel = playlistListViewModel,
 							onSetShareId = { shareId = it },
 							onSetDeletionId = { deletionId = it },
 							tab = "library"

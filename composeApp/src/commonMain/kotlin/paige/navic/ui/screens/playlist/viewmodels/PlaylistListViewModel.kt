@@ -1,4 +1,4 @@
-package paige.navic.ui.viewmodels
+package paige.navic.ui.screens.playlist.viewmodels
 
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ import paige.navic.data.session.SessionManager
 import paige.navic.utils.UiState
 import paige.navic.utils.sortedByMode
 
-class PlaylistsViewModel(
+class PlaylistListViewModel(
 	private val repository: PlaylistsRepository = PlaylistsRepository()
 ) : ViewModel() {
 	private val _playlistsState = MutableStateFlow<UiState<List<Playlist>>>(UiState.Loading)
@@ -68,8 +68,8 @@ class PlaylistsViewModel(
 
 	fun sortPlaylists() {
 		val playlists = (_playlistsState.value as? UiState.Success)?.data?.sortedByMode(
-			Settings.shared.playlistSortMode,
-			Settings.shared.playlistsReversed
+			Settings.Companion.shared.playlistSortMode,
+			Settings.Companion.shared.playlistsReversed
 		) ?: return
 		_playlistsState.value = UiState.Success(playlists)
 	}

@@ -31,7 +31,7 @@ import paige.navic.icons.outlined.Share
 import paige.navic.icons.outlined.Star
 import paige.navic.ui.components.common.Dropdown
 import paige.navic.ui.components.common.DropdownItem
-import paige.navic.ui.components.dialogs.PlaylistUpdateDialog
+import paige.navic.ui.screens.playlist.dialogs.PlaylistUpdateDialog
 import paige.navic.utils.UiState
 
 @Composable

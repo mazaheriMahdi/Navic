@@ -1,4 +1,4 @@
-package paige.navic.ui.screens
+package paige.navic.ui.screens.playlist
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
@@ -12,7 +12,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -20,7 +19,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumFloatingActionButton
 import androidx.compose.material3.Scaffold
@@ -40,23 +38,13 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import dev.zt64.subsonic.api.model.Playlist
 import navic.composeapp.generated.resources.Res
-import navic.composeapp.generated.resources.action_delete
-import navic.composeapp.generated.resources.action_share
-import navic.composeapp.generated.resources.count_songs
 import navic.composeapp.generated.resources.info_needs_log_in
 import navic.composeapp.generated.resources.info_no_playlists_short
-import navic.composeapp.generated.resources.option_sort_ascending
-import navic.composeapp.generated.resources.option_sort_descending
 import navic.composeapp.generated.resources.title_create_playlist
 import navic.composeapp.generated.resources.title_playlists
-import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import paige.navic.LocalCtx
-import paige.navic.LocalNavStack
-import paige.navic.data.models.settings.enums.PlaylistSortMode
-import paige.navic.data.models.Screen
 import paige.navic.data.models.settings.Settings
 import paige.navic.data.models.settings.enums.BottomBarCollapseMode
 import paige.navic.data.models.settings.enums.BottomBarVisibilityMode
@@ -64,26 +52,20 @@ import paige.navic.data.session.SessionManager
 import paige.navic.icons.Icons
 import paige.navic.icons.outlined.Add
 import paige.navic.icons.outlined.PlaylistRemove
-import paige.navic.icons.outlined.Share
-import paige.navic.icons.outlined.Sort
 import paige.navic.ui.components.common.ContentUnavailable
-import paige.navic.ui.components.common.Dropdown
-import paige.navic.ui.components.common.DropdownItem
-import paige.navic.ui.components.common.SelectionDropdown
-import paige.navic.ui.components.common.SelectionDropdownItem
 import paige.navic.ui.components.dialogs.DeletionDialog
 import paige.navic.ui.components.dialogs.DeletionEndpoint
-import paige.navic.ui.components.dialogs.PlaylistCreateDialog
+import paige.navic.ui.screens.playlist.dialogs.PlaylistCreateDialog
 import paige.navic.ui.components.dialogs.ShareDialog
 import paige.navic.ui.components.layouts.ArtGrid
-import paige.navic.ui.components.layouts.ArtGridItem
 import paige.navic.ui.components.layouts.NestedTopBar
 import paige.navic.ui.components.layouts.RootBottomBar
 import paige.navic.ui.components.layouts.RootTopBar
-import paige.navic.ui.components.layouts.TopBarButton
 import paige.navic.ui.components.layouts.artGridError
 import paige.navic.ui.components.layouts.artGridPlaceholder
-import paige.navic.ui.viewmodels.PlaylistsViewModel
+import paige.navic.ui.screens.playlist.components.PlaylistListScreenItem
+import paige.navic.ui.screens.playlist.components.PlaylistListScreenSortButton
+import paige.navic.ui.screens.playlist.viewmodels.PlaylistListViewModel
 import paige.navic.utils.LocalBottomBarScrollManager
 import paige.navic.utils.UiState
 import paige.navic.utils.withoutTop
@@ -91,9 +73,9 @@ import kotlin.time.Duration
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun PlaylistsScreen(
+fun PlaylistListScreen(
 	nested: Boolean = false,
-	viewModel: PlaylistsViewModel = viewModel { PlaylistsViewModel() }
+	viewModel: PlaylistListViewModel = viewModel { PlaylistListViewModel() }
 ) {
 	val ctx = LocalCtx.current
 
@@ -117,12 +99,12 @@ fun PlaylistsScreen(
 				RootTopBar(
 					title = { Text(stringResource(Res.string.title_playlists)) },
 					scrollBehavior = scrollBehavior,
-					actions = { SortButton(!nested, viewModel) }
+					actions = { PlaylistListScreenSortButton(!nested, viewModel) }
 				)
 			} else {
 				NestedTopBar(
 					title = { Text(stringResource(Res.string.title_playlists)) },
-					actions = { SortButton(!nested, viewModel) }
+					actions = { PlaylistListScreenSortButton(!nested, viewModel) }
 				)
 			}
 		},
@@ -196,7 +178,7 @@ fun PlaylistsScreen(
 						is UiState.Error -> artGridError(state)
 						is UiState.Success -> {
 							items(state.data, { it.id }) { playlist ->
-								PlaylistsScreenItem(
+								PlaylistListScreenItem(
 									modifier = Modifier.animateItem(fadeInSpec = null),
 									playlist = playlist,
 									tab = "playlists",
@@ -242,131 +224,5 @@ fun PlaylistsScreen(
 	if (createDialogShown) {
 		@Suppress("AssignedValueIsNeverRead")
 		PlaylistCreateDialog(onDismissRequest = { createDialogShown = false })
-	}
-}
-
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun SortButton(
-	root: Boolean,
-	viewModel: PlaylistsViewModel
-) {
-	val items = remember { PlaylistSortMode.entries }
-	Box {
-		var expanded by remember { mutableStateOf(false) }
-		if (root) {
-			IconButton(onClick = {
-				expanded = true
-			}) {
-				Icon(
-					Icons.Outlined.Sort,
-					contentDescription = null
-				)
-			}
-		} else {
-			TopBarButton({
-				expanded = true
-			}) {
-				Icon(
-					Icons.Outlined.Sort,
-					contentDescription = null
-				)
-			}
-		}
-		SelectionDropdown(
-			items = items,
-			label = { stringResource(it.displayName) },
-			expanded = expanded,
-			onDismissRequest = { expanded = false },
-			selection = Settings.shared.playlistSortMode,
-			onSelect = {
-				Settings.shared.playlistSortMode = it
-				viewModel.sortPlaylists()
-			},
-			footer = {
-				SelectionDropdownItem(
-					label = stringResource(Res.string.option_sort_ascending),
-					selected = !Settings.shared.playlistsReversed,
-					index = 5,
-					onClick = {
-						Settings.shared.playlistsReversed = false
-						expanded = false
-						viewModel.sortPlaylists()
-					}
-				)
-				SelectionDropdownItem(
-					label = stringResource(Res.string.option_sort_descending),
-					selected = Settings.shared.playlistsReversed,
-					index = 4,
-					onClick = {
-						Settings.shared.playlistsReversed = true
-						expanded = false
-						viewModel.sortPlaylists()
-					}
-				)
-			}
-		)
-	}
-}
-
-@Composable
-fun PlaylistsScreenItem(
-	modifier: Modifier = Modifier,
-	playlist: Playlist,
-	tab: String,
-	viewModel: PlaylistsViewModel,
-	onSetShareId: (String) -> Unit,
-	onSetDeletionId: (String) -> Unit
-) {
-	val ctx = LocalCtx.current
-	val backStack = LocalNavStack.current
-	val selection by viewModel.selectedPlaylist.collectAsState()
-	Box(modifier) {
-		ArtGridItem(
-			onClick = {
-				ctx.clickSound()
-				backStack.add(Screen.Tracks(playlist, "playlists"))
-			},
-			onLongClick = { viewModel.selectPlaylist(playlist) },
-			coverArtId = playlist.coverArtId,
-			title = playlist.name,
-			subtitle = buildString {
-				append(
-					pluralStringResource(
-						Res.plurals.count_songs,
-						playlist.songCount,
-						playlist.songCount
-					)
-				)
-				playlist.comment?.let {
-					append("\n${playlist.comment}\n")
-				}
-			},
-			id = playlist.id,
-			tab = tab
-		)
-		Dropdown(
-			expanded = selection == playlist,
-			onDismissRequest = {
-				viewModel.clearSelection()
-			}
-		) {
-			DropdownItem(
-				text = { Text(stringResource(Res.string.action_share)) },
-				leadingIcon = { Icon(Icons.Outlined.Share, null) },
-				onClick = {
-					onSetShareId(playlist.id)
-					viewModel.clearSelection()
-				},
-			)
-			DropdownItem(
-				text = { Text(stringResource(Res.string.action_delete)) },
-				leadingIcon = { Icon(Icons.Outlined.PlaylistRemove, null) },
-				onClick = {
-					onSetDeletionId(playlist.id)
-					viewModel.clearSelection()
-				}
-			)
-		}
 	}
 }

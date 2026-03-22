@@ -1,4 +1,4 @@
-package paige.navic.ui.viewmodels
+package paige.navic.ui.screens.playlist.viewmodels
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel

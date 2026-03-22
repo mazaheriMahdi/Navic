@@ -33,7 +33,7 @@ import paige.navic.icons.outlined.PlaylistAdd
 import paige.navic.icons.outlined.Share
 import paige.navic.ui.components.common.Dropdown
 import paige.navic.ui.components.common.DropdownItem
-import paige.navic.ui.components.dialogs.PlaylistUpdateDialog
+import paige.navic.ui.screens.playlist.dialogs.PlaylistUpdateDialog
 import paige.navic.ui.components.layouts.NestedTopBar
 import paige.navic.ui.components.layouts.TopBarButton
 import paige.navic.utils.UiState

@@ -1,4 +1,4 @@
-package paige.navic.ui.components.dialogs
+package paige.navic.ui.screens.playlist.dialogs
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +47,8 @@ import paige.navic.icons.outlined.PlaylistAdd
 import paige.navic.icons.outlined.Refresh
 import paige.navic.ui.components.common.ErrorBox
 import paige.navic.ui.components.common.FormButton
-import paige.navic.ui.viewmodels.PlaylistUpdateDialogViewModel
+import paige.navic.ui.components.dialogs.FormDialog
+import paige.navic.ui.screens.playlist.viewmodels.PlaylistUpdateDialogViewModel
 import paige.navic.utils.UiState
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -130,7 +131,8 @@ fun PlaylistUpdateDialog(
 		},
 		buttons = {
 			if ((state as? UiState.Success)?.data?.isNotEmpty() == true
-				|| state is UiState.Loading) {
+				|| state is UiState.Loading
+			) {
 				FormButton(
 					onClick = {
 						ctx.clickSound()
@@ -173,22 +175,26 @@ fun PlaylistUpdateDialog(
 				) {
 					ContainedLoadingIndicator(Modifier.size(48.dp))
 				}
+
 				is UiState.Error -> Box(
 					modifier = Modifier.fillMaxWidth(),
 					contentAlignment = Alignment.Center
 				) {
 					ErrorBox(state)
 				}
+
 				is UiState.Success -> {
 					val playlists = state.data
 					if (playlists.isNotEmpty()) {
 						list(playlists)
 					} else {
-						Text(stringResource(
-							if (playlistToExclude != null)
-								Res.string.info_no_other_playlists
-							else Res.string.info_no_playlists
-						))
+						Text(
+							stringResource(
+								if (playlistToExclude != null)
+									Res.string.info_no_other_playlists
+								else Res.string.info_no_playlists
+							)
+						)
 					}
 				}
 			}
@@ -197,12 +203,12 @@ fun PlaylistUpdateDialog(
 
 	if (createDialogShown) {
 		@Suppress("AssignedValueIsNeverRead")
-		PlaylistCreateDialog(
+		(PlaylistCreateDialog(
 			navigateAfterwards = false,
 			onDismissRequest = {
 				createDialogShown = false
 				viewModel.refreshResults()
 			}
-		)
+		))
 	}
 }

@@ -36,7 +36,7 @@ import paige.navic.icons.outlined.MoreHoriz
 import paige.navic.icons.outlined.PlaylistAdd
 import paige.navic.ui.components.common.Dropdown
 import paige.navic.ui.components.common.DropdownItem
-import paige.navic.ui.components.dialogs.PlaylistUpdateDialog
+import paige.navic.ui.screens.playlist.dialogs.PlaylistUpdateDialog
 
 @Composable
 fun NowPlayingMoreButton() {

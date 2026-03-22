@@ -75,7 +75,7 @@ import paige.navic.ui.screens.artist.ArtistListScreen
 import paige.navic.ui.screens.LibraryScreen
 import paige.navic.ui.screens.LyricsScreen
 import paige.navic.ui.screens.nowPlaying.NowPlayingScreen
-import paige.navic.ui.screens.PlaylistsScreen
+import paige.navic.ui.screens.playlist.PlaylistListScreen
 import paige.navic.ui.screens.QueueScreen
 import paige.navic.ui.screens.search.SearchScreen
 import paige.navic.ui.screens.SharesScreen
@@ -235,7 +235,7 @@ private fun entryProvider(
 			AlbumListScreen(key.nested, key.listType)
 		}
 		entry<Screen.Playlists>(metadata = navtabMetadata) { key ->
-			PlaylistsScreen(key.nested)
+			PlaylistListScreen(key.nested)
 		}
 		entry<Screen.ArtistList>(metadata = navtabMetadata) { key ->
 			ArtistListScreen(key.nested)

@@ -1,4 +1,4 @@
-package paige.navic.ui.components.dialogs
+package paige.navic.ui.screens.playlist.dialogs
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.input.TextFieldLineLimits
@@ -28,7 +28,8 @@ import paige.navic.data.models.Screen
 import paige.navic.icons.Icons
 import paige.navic.icons.outlined.PlaylistAdd
 import paige.navic.ui.components.common.FormButton
-import paige.navic.ui.viewmodels.PlaylistCreateDialogViewModel
+import paige.navic.ui.components.dialogs.FormDialog
+import paige.navic.ui.screens.playlist.viewmodels.PlaylistCreateDialogViewModel
 import paige.navic.utils.UiState
 
 @Composable
