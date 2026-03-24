@@ -53,7 +53,7 @@ object SessionManager {
 	)
 
 	fun SubsonicApi.getCoverArtUrl(coverArtId: String?): String? {
-		return coverArtId?.let { api.getCoverArtUrl(it) }
+		return coverArtId?.let { this.getCoverArtUrl(id = coverArtId) }
 	}
 
 	val currentUser: User?
