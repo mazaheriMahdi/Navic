@@ -62,6 +62,7 @@ fun LyricsScreenKaraokeText(
 			fontSize = 32.sp,
 			fontWeight = FontWeight(600),
 			style = MaterialTheme.typography.headlineLargeEmphasized,
+			color = MaterialTheme.colorScheme.onSurface,
 			modifier = Modifier.alpha(inactiveAlpha * 0.35f),
 			onTextLayout = { textLayoutResult = it }
 		)
@@ -72,6 +73,7 @@ fun LyricsScreenKaraokeText(
 				fontSize = 32.sp,
 				fontWeight = FontWeight(600),
 				style = MaterialTheme.typography.headlineLargeEmphasized,
+				color = MaterialTheme.colorScheme.onSurface,
 				modifier = if (lyricsBeatByBeat) Modifier.graphicsLayer(
 					compositingStrategy = CompositingStrategy.Offscreen
 				).drawWithCache {

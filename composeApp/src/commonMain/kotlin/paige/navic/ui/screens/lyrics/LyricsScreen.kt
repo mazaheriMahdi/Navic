@@ -42,6 +42,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -92,10 +93,10 @@ fun LyricsScreen(
 	val playerState by player.uiState.collectAsStateWithLifecycle()
 	val state by viewModel.lyricsState.collectAsState()
 
-	var isSelectionMode by remember { mutableStateOf(false) }
-	val selectedIndices = remember { mutableStateListOf<Int>() }
-	var wasPlayingBeforeSelection by remember { mutableStateOf(false) }
-	var showShareSheet by remember { mutableStateOf(false) }
+	var isSelectionMode by rememberSaveable { mutableStateOf(false) }
+	val selectedIndices = rememberSaveable { mutableStateListOf<Int>() }
+	var wasPlayingBeforeSelection by rememberSaveable { mutableStateOf(false) }
+	var showShareSheet by rememberSaveable { mutableStateOf(false) }
 
 	val contentColor = MaterialTheme.colorScheme.onSurface
 
