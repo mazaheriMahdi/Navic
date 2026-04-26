@@ -349,6 +349,7 @@ fun ArtistDetailScreen(
 									)
 								}
 							}
+							if (state.similarArtists.isEmpty()) return@Column
 							Text(
 								stringResource(Res.string.title_similar_artists),
 								style = MaterialTheme.typography.titleMediumEmphasized,
